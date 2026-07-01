@@ -31,15 +31,25 @@ export default function SpecForm({ initial, onSave, onCancel }: Props) {
 
   const handleGeoChange = (group: GeoGroup) => {
     const countries = GEO_COUNTRIES[group].countries.map(c => c.name)
-    update({ geoGroup: group, countries })
+    setSpec(prev => ({ ...prev, geoGroup: group, countries }))
   }
 
   const toggleCountry = (country: string) => {
-    const current = spec.countries
-    const next = current.includes(country)
-      ? current.filter(c => c !== country)
-      : [...current, country]
-    update({ countries: next })
+    setSpec(prev => {
+      const next = prev.countries.includes(country)
+        ? prev.countries.filter(c => c !== country)
+        : [...prev.countries, country]
+      return { ...prev, countries: next }
+    })
+  }
+
+  const selectAll = () => {
+    const all = GEO_COUNTRIES[spec.geoGroup].countries.map(c => c.name)
+    setSpec(prev => ({ ...prev, countries: all }))
+  }
+
+  const deselectAll = () => {
+    setSpec(prev => ({ ...prev, countries: [] }))
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -136,23 +146,33 @@ export default function SpecForm({ initial, onSave, onCancel }: Props) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-surface-700 mb-2">Countries in {spec.geoGroup}</label>
+        <div className="flex items-center justify-between mb-2">
+          <label className="text-sm font-medium text-surface-700">Countries in {spec.geoGroup}</label>
+          <div className="flex items-center gap-2 text-xs">
+            <span className="text-surface-500">{spec.countries.length}/{GEO_COUNTRIES[spec.geoGroup].countries.length} selected</span>
+            <button type="button" onClick={selectAll} className="text-brand-600 hover:text-brand-800 font-medium">Select All</button>
+            <button type="button" onClick={deselectAll} className="text-surface-500 hover:text-surface-700 font-medium">Clear</button>
+          </div>
+        </div>
         <div className="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto border border-surface-200 rounded-lg p-3">
-          {GEO_COUNTRIES[spec.geoGroup].countries.map(c => (
-            <button
-              key={c.code}
-              type="button"
-              onClick={() => toggleCountry(c.name)}
-              className={cn(
-                'px-2.5 py-1 rounded-full text-xs font-medium border transition',
-                spec.countries.includes(c.name)
-                  ? 'bg-brand-100 border-brand-300 text-brand-700'
-                  : 'bg-surface-50 border-surface-200 text-surface-600 hover:bg-surface-100',
-              )}
-            >
-              {c.name} ({c.code})
-            </button>
-          ))}
+          {GEO_COUNTRIES[spec.geoGroup].countries.map(c => {
+            const selected = spec.countries.includes(c.name)
+            return (
+              <button
+                key={c.code}
+                type="button"
+                onClick={() => toggleCountry(c.name)}
+                className={cn(
+                  'px-2.5 py-1 rounded-full text-xs font-medium border transition-all cursor-pointer select-none',
+                  selected
+                    ? 'bg-blue-200 border-blue-400 text-blue-900 font-semibold shadow-sm'
+                    : 'bg-white border-gray-300 text-gray-600 hover:bg-gray-50',
+                )}
+              >
+                {selected ? '✓ ' : ''}{c.name} ({c.code})
+              </button>
+            )
+          })}
         </div>
       </div>
 

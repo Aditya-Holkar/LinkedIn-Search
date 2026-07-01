@@ -65,7 +65,7 @@ export default function SpecManager({ onSelectSpec }: Props) {
                 <div className="flex flex-wrap gap-1.5 text-xs">
                   <span className="badge-blue">{spec.targetTitle}</span>
                   {spec.industry && <span className="badge-green">{spec.industry}</span>}
-                  <span className="badge-purple">{spec.geoGroup} ({spec.countries.length} countries)</span>
+                   <span className="badge-purple">{spec.geoGroup} ({spec.countries.length} countries)</span>
                   <span className="badge-orange">{spec.employeeSizeMin}-{spec.employeeSizeMax} emp.</span>
                   <span className="badge-gray">Limit: {spec.domainLimit}/domain</span>
                 </div>
