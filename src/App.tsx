@@ -9,9 +9,10 @@ import ProfileCard from './components/ProfileCard'
 import BatchSummary from './components/BatchSummary'
 import IndustryRolesPanel from './components/IndustryRolesPanel'
 import LinkedInDorkGenerator from './components/LinkedInDorkGenerator'
+import CompanyEnricher from './components/CompanyEnricher'
 import ManualPage from './components/ManualPage'
 
-type Tab = 'specs' | 'validate' | 'results' | 'roles' | 'dork' | 'manual'
+type Tab = 'specs' | 'validate' | 'results' | 'roles' | 'dork' | 'enrich' | 'manual'
 
 const TABS: { key: Tab; label: string }[] = [
   { key: 'manual', label: '📖 Manual' },
@@ -20,6 +21,7 @@ const TABS: { key: Tab; label: string }[] = [
   { key: 'results', label: '📊 Results' },
   { key: 'roles', label: '🎯 Roles' },
   { key: 'dork', label: '🔗 Dork' },
+  { key: 'enrich', label: '🏢 Company' },
 ]
 
 export default function App() {
@@ -246,6 +248,10 @@ export default function App() {
 
         {activeTab === 'dork' && (
           <LinkedInDorkGenerator />
+        )}
+
+        {activeTab === 'enrich' && (
+          <CompanyEnricher />
         )}
 
         {activeTab === 'manual' && (
